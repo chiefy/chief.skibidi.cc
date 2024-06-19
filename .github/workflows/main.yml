@@ -1,0 +1,25 @@
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+
+jobs:
+  publish:
+    name: push details to Dev.to
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3 # checks out my code to the actions build
+    - name: Publish articles on Dev.to
+      uses: sinedied/publish-devto@v2
+      with:
+        devto_key: ${{ secrets.DEV_TO_API_KEY }} # the secret you setup
+        github_token: ${{ secrets.GITHUB_TOKEN }} # this is an inbuilt secret by github
+        files: 'content/posts/*.md'
+        branch: main
+        conventional_commits: true
+        dry_run: false
